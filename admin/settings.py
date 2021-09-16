@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'django_admin_logs',
+    'djoser',
     'coreapi',
     'rest_framework_swagger',
 
@@ -79,6 +80,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries' : {
+                'staticfiles': 'django.templatetags.static', 
+            }
         },
     },
 ]
@@ -99,14 +103,16 @@ DATABASES = {
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend'
-    ],
+    # 'DEFAULT_FILTER_BACKENDS': [
+    #     'django_filters.rest_framework.DjangoFilterBackend'
+    # ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication'
     ],
+    # 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' ,
 
 }
+
 
 
 # Password validation
@@ -127,11 +133,22 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-JWT_AUTH = {
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
+SIMPLE_JWT = {
+   'AUTH_HEADER_TYPES': ('JWT',),
 }
+
+DJOSER={
+    'SERIALIZERS': {
+        'user': 'backend.serializers.UserAuthSerializer',
+        'current_user': 'backend.serializers.UserAuthSerializer'
+    }
+}
+
+# JWT_AUTH = {
+#     'JWT_ALLOW_REFRESH': True,
+#     'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
+#     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
+# }
 
 
 # Internationalization
@@ -165,4 +182,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # AUTH SETTINGS
 AUTH_USER_MODEL='backend.User'
 
-CORS_ALLOW_ALL_ORIGINS=True
+# CORS_ALLOW_ALL_ORIGINS=True
+CSRF_TRUSTED_ORIGINS =[
+    'localhost:8080',
+    '127.0.0.1:8080'
+]
